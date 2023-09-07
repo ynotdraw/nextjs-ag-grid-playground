@@ -106,7 +106,7 @@ export default function RootLayout({
           </nav>
         </header>
 
-        <main className="flex min-h-screen flex-col max-w-7xl p-6 bg-slate-200 lg:px-8">
+        <main className="flex min-h-screen flex-col p-6 bg-slate-200 lg:px-8">
           {children}
         </main>
       </body>

@@ -153,7 +153,7 @@ const Table = ({}) => {
  */
 export default function Home() {
   return (
-    <div className="ag-theme-alpine h-96 w-full mx-auto p-4">
+    <div className="ag-theme-alpine h-96 w-full max-w-7xl mx-auto p-4">
       <Table />
     </div>
   );
