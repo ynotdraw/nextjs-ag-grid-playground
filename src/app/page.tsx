@@ -43,7 +43,7 @@ const Table = ({}) => {
 
       if (!response.ok) {
         console.error("The API request failed, falling back to static JSON");
-        setProducts(productsFromJson);
+        setProducts(productsFromJson.products);
         setIsLoading(false);
         return;
       }
