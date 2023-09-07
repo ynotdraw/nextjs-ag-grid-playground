@@ -27,6 +27,10 @@ interface ProductsResponse {
   products: Array<Product>;
 }
 
+/**
+ * Renders a "Buy now" button in  the last column. This is mostly testing how easy it is to
+ * add a custom cell renderer with AG Grid.
+ */
 const BuyNowCell = (props: ICellRendererParams) => {
   return (
     <button
@@ -66,12 +70,20 @@ const BuyNowCell = (props: ICellRendererParams) => {
   );
 };
 
+/**
+ * Renders a custom tooltip for the Description column. I wanted to see how easy it was
+ * to render custom tooltip components.
+ */
 const DescriptionTooltip = (props: ITooltipParams) => {
   const data = props.data.description;
 
   return <div className="bg-slate-600 text-white rounded-md p-2">{data}</div>;
 };
 
+/**
+ * A table component utilizing AG Grid.  The component will fetch data and render
+ * the results.
+ */
 const Table = ({}) => {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [products, setProducts] = React.useState<any>(null);
@@ -136,6 +148,9 @@ const Table = ({}) => {
   return <AgGridReact rowData={products} columnDefs={columnDefs} />;
 };
 
+/**
+ * Home / default route.
+ */
 export default function Home() {
   return (
     <div className="ag-theme-alpine h-96 w-full mx-auto p-4">
