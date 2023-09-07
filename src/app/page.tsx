@@ -4,7 +4,7 @@ import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 
 import { AgGridReact } from "ag-grid-react";
-import { ColDef, ICellRendererParams } from "ag-grid-community";
+import { ColDef, ICellRendererParams, ITooltipParams } from "ag-grid-community";
 import * as React from "react";
 
 import productsFromJson from "../products-data.json";
@@ -66,6 +66,12 @@ const BuyNowCell = (props: ICellRendererParams) => {
   );
 };
 
+const DescriptionTooltip = (props: ITooltipParams) => {
+  const data = props.data.description;
+
+  return <div className="bg-slate-600 text-white rounded-md p-2">{data}</div>;
+};
+
 const Table = ({}) => {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [products, setProducts] = React.useState<any>(null);
@@ -103,9 +109,14 @@ const Table = ({}) => {
   }, []);
 
   const [columnDefs] = React.useState<ColDef[]>([
-    { field: "id", headerName: "ID", width: 100, sortable: true },
+    { field: "id", headerName: "ID", width: 100, sortable: true, sort: "asc" },
     { field: "title", sortable: true },
-    { field: "description", resizable: true },
+    {
+      field: "description",
+      resizable: true,
+      tooltipField: "description",
+      tooltipComponent: DescriptionTooltip,
+    },
     { field: "price", sortable: true },
     { field: "discountPercentage" },
     { field: "rating", sortable: true },
