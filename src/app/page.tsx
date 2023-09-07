@@ -7,20 +7,71 @@ import { AgGridReact } from "ag-grid-react";
 import { ColDef } from "ag-grid-community";
 import * as React from "react";
 
+interface Product {
+  id: number;
+  title: string;
+  description: string;
+  price: number;
+  discountPercentage: number;
+  rating: number;
+  stock: number;
+  brand: string;
+  category: string;
+  thumbnail: string;
+  images: Array<string>;
+}
+
+interface ProductsResponse {
+  products: Array<Product>;
+}
+
 const Table = ({}) => {
-  const [rowData] = React.useState([
-    { make: "Toyota", model: "Celica", price: 35000 },
-    { make: "Ford", model: "Mondeo", price: 32000 },
-    { make: "Porsche", model: "Boxster", price: 72000 },
-  ]);
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [products, setProducts] = React.useState<any>(null);
+
+  React.useEffect(() => {
+    async function fetchData() {
+      setIsLoading(true);
+
+      // NOTE: This could stop working at any moment, so we shouldn't be
+      //       **too** reliant on it.  Check out `products-data.json`
+      //       if this stops working.
+      const response = await fetch("https://dummyjson.com/products");
+
+      if (!response.ok) {
+        throw Error("An error was returned from the API.");
+      }
+
+      const results: ProductsResponse = await response.json();
+
+      setProducts(results?.products);
+
+      setIsLoading(false);
+    }
+
+    fetchData();
+
+    return () => {
+      setIsLoading(false);
+      setProducts(null);
+    };
+  }, []);
 
   const [columnDefs] = React.useState<ColDef[]>([
-    { field: "make" },
-    { field: "model" },
+    { field: "id" },
+    { field: "title" },
+    { field: "description" },
     { field: "price" },
+    { field: "discountPercentage" },
+    { field: "rating" },
+    { field: "stock" },
+    { field: "brand" },
+    { field: "category" },
+    { field: "thumbnail" },
+    { field: "images" },
   ]);
 
-  return <AgGridReact rowData={rowData} columnDefs={columnDefs} />;
+  return <AgGridReact rowData={products} columnDefs={columnDefs} />;
 };
 
 export default function Home() {
