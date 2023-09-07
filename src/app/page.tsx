@@ -7,6 +7,8 @@ import { AgGridReact } from "ag-grid-react";
 import { ColDef } from "ag-grid-community";
 import * as React from "react";
 
+import productsFromJson from "../products-data.json";
+
 interface Product {
   id: number;
   title: string;
@@ -39,7 +41,10 @@ const Table = ({}) => {
       const response = await fetch("https://dummyjson.com/products");
 
       if (!response.ok) {
-        throw Error("An error was returned from the API.");
+        console.error("The API request failed, falling back to static JSON");
+        setProducts(productsFromJson);
+        setIsLoading(false);
+        return;
       }
 
       const results: ProductsResponse = await response.json();
