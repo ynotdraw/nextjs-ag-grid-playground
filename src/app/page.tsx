@@ -38,6 +38,7 @@ const Table = ({}) => {
       // NOTE: This could stop working at any moment, so we shouldn't be
       //       **too** reliant on it.  Check out `products-data.json`
       //       if this stops working.
+      //       Could also use https://www.ag-grid.com/example-assets/small-olympic-winners.json instead
       const response = await fetch("https://dummyjson.com/products");
 
       if (!response.ok) {
