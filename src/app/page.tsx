@@ -58,17 +58,17 @@ const Table = ({}) => {
   }, []);
 
   const [columnDefs] = React.useState<ColDef[]>([
-    { field: "id" },
+    { field: "id", headerName: "ID", width: 60 },
     { field: "title" },
-    { field: "description" },
+    { field: "description", resizable: true },
     { field: "price" },
     { field: "discountPercentage" },
     { field: "rating" },
     { field: "stock" },
     { field: "brand" },
     { field: "category" },
-    { field: "thumbnail" },
-    { field: "images" },
+    { field: "thumbnail", resizable: true },
+    { field: "images", resizable: true },
   ]);
 
   return <AgGridReact rowData={products} columnDefs={columnDefs} />;
