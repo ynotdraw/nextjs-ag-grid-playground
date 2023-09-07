@@ -64,15 +64,15 @@ const Table = ({}) => {
   }, []);
 
   const [columnDefs] = React.useState<ColDef[]>([
-    { field: "id", headerName: "ID", width: 60 },
-    { field: "title" },
+    { field: "id", headerName: "ID", width: 100, sortable: true },
+    { field: "title", sortable: true },
     { field: "description", resizable: true },
-    { field: "price" },
+    { field: "price", sortable: true },
     { field: "discountPercentage" },
-    { field: "rating" },
-    { field: "stock" },
-    { field: "brand" },
-    { field: "category" },
+    { field: "rating", sortable: true },
+    { field: "stock", sortable: true },
+    { field: "brand", sortable: true },
+    { field: "category", sortable: true },
     { field: "thumbnail", resizable: true },
     { field: "images", resizable: true },
   ]);
