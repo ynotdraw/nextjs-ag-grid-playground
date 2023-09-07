@@ -1,6 +1,8 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import "ag-grid-community/styles/ag-grid.css";
+import "ag-grid-community/styles/ag-theme-alpine.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -44,9 +46,9 @@ export default function RootLayout({
                   <path
                     d="M4.75 10.75v9a1.16 1.16 0 00.213.725.717.717 0 00.587.275h12.4a.737.737 0 00.55-.275 1.1 1.1 0 00.25-.725v-9m-16 2l4.5-5 4.5-5 4.5 5 4.5 5m-11.5 8v-5a.945.945 0 011-1h3a.945.945 0 011 1v5"
                     fill="none"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
                   ></path>
                 </svg>
               </a>
@@ -71,9 +73,9 @@ export default function RootLayout({
                   <path
                     d="M3 12h18M3 6h18M3 18h18"
                     fill="none"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
                   ></path>
                 </svg>
               </button>
@@ -104,7 +106,7 @@ export default function RootLayout({
           </nav>
         </header>
 
-        <main className="flex min-h-screen flex-col max-w-7xl p-6 lg:px-8">
+        <main className="flex min-h-screen flex-col max-w-7xl p-6 bg-slate-200 lg:px-8">
           {children}
         </main>
       </body>
