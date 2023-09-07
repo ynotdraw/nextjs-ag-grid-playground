@@ -25,12 +25,8 @@ const Table = ({}) => {
 
 export default function Home() {
   return (
-    <div className="h-full w-full">
-      <div className="mx-auto p-4 h-full w-full">
-        <div className="ag-theme-alpine h-96 w-full">
-          <Table />
-        </div>
-      </div>
+    <div className="ag-theme-alpine h-96 w-full mx-auto p-4">
+      <Table />
     </div>
   );
 }
