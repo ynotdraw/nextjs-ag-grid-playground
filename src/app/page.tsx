@@ -2,12 +2,38 @@
 
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
+import "ag-grid-enterprise";
 
 import { AgGridReact } from "ag-grid-react";
-import { ColDef, ICellRendererParams, ITooltipParams } from "ag-grid-community";
+import {
+  ColDef,
+  ICellRendererParams,
+  ITooltipParams,
+  IServerSideGetRowsParams,
+} from "ag-grid-enterprise";
 import * as React from "react";
 
 import productsFromJson from "../products-data.json";
+
+/**
+ * Custom sort function.  Normally the backend would do this for us,
+ * but we'll simulate that here.
+ */
+const sortProducts = ({
+  products,
+  key,
+  direction,
+}: {
+  products: ProductsResponse["products"];
+  key: keyof Product;
+  direction: "asc" | "desc";
+}) => {
+  if (direction === "asc") {
+    return [...products].sort((a, b) => (a[key] > b[key] ? 1 : -1));
+  }
+
+  return [...products].sort((a, b) => (a[key] > b[key] ? -1 : 1));
+};
 
 interface Product {
   id: number;
@@ -85,41 +111,6 @@ const DescriptionTooltip = (props: ITooltipParams) => {
  * the results.
  */
 const Table = ({}) => {
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const [products, setProducts] = React.useState<any>(null);
-
-  React.useEffect(() => {
-    async function fetchData() {
-      setIsLoading(true);
-
-      // NOTE: This could stop working at any moment, so we shouldn't be
-      //       **too** reliant on it.  Check out `products-data.json`
-      //       if this stops working.
-      //       Could also use https://www.ag-grid.com/example-assets/small-olympic-winners.json instead
-      const response = await fetch("https://dummyjson.com/products");
-
-      if (!response.ok) {
-        console.error("The API request failed, falling back to static JSON");
-        setProducts(productsFromJson.products);
-        setIsLoading(false);
-        return;
-      }
-
-      const results: ProductsResponse = await response.json();
-
-      setProducts(results?.products);
-
-      setIsLoading(false);
-    }
-
-    fetchData();
-
-    return () => {
-      setIsLoading(false);
-      setProducts(null);
-    };
-  }, []);
-
   const [columnDefs] = React.useState<ColDef[]>([
     { field: "id", headerName: "ID", width: 100, sortable: true, sort: "asc" },
     { field: "title", sortable: true },
@@ -145,7 +136,43 @@ const Table = ({}) => {
     },
   ]);
 
-  return <AgGridReact rowData={products} columnDefs={columnDefs} />;
+  return (
+    <AgGridReact
+      columnDefs={columnDefs}
+      rowModelType="serverSide"
+      serverSideDatasource={{
+        getRows: async (params: IServerSideGetRowsParams) => {
+          // For now, let's only sort by one column
+          const sortDirection = params?.request?.sortModel?.[0]?.sort;
+          const sortColumn = params?.request?.sortModel?.[0]?.colId;
+
+          // NOTE: This could stop working at any moment, so we shouldn't be
+          //       **too** reliant on it.  Check out `products-data.json`
+          //       if this stops working.
+          //       Could also use https://www.ag-grid.com/example-assets/small-olympic-winners.json instead
+          const response = await fetch("https://dummyjson.com/products");
+
+          const results: ProductsResponse = response.ok
+            ? await response.json()
+            : productsFromJson;
+
+          // Add an artifical sleep to simulate the backend doing any sorting
+          await new Promise((r) => setTimeout(r, 500));
+
+          const sorted =
+            sortDirection && sortColumn
+              ? sortProducts({
+                  products: results.products,
+                  key: sortColumn as keyof Product,
+                  direction: sortDirection,
+                })
+              : results.products;
+
+          params.success({ rowData: sorted });
+        },
+      }}
+    />
+  );
 };
 
 /**
